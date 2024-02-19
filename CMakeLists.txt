@@ -12,7 +12,7 @@ endif()
 project ("06")
 
 # Добавьте источник в исполняемый файл этого проекта.
-add_executable (06 "main.cpp" "main.h" "Matrix.h" "Matrix.cpp" "LineOfMatrix.h" "LineOfMatrix.cpp")
+add_executable (06 "main.cpp" "main.h" "Matrix.h"   )
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET 06 PROPERTY CXX_STANDARD 20)
