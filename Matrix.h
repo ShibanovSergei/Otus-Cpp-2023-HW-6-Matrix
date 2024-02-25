@@ -1,40 +1,36 @@
 #include <map>
 #include <tuple>
 
-using FullIndex = std::pair<int, int>;
-
-template<typename T>
-struct MatrixIterator
-{
-	using ResultType = std::tuple<const int&, const int&, T&>;
-public:	
-	MatrixIterator(std::map<FullIndex, T>* values) { _values = values; };
-
-	MatrixIterator operator++() { ++iter; return *this; }
-	bool operator!=(const MatrixIterator& other) { return iter != other.iter; }
-	ResultType operator*() { return iteratorToTuple(iter); }
-	MatrixIterator begin() 
-	{ 
-		iter = _values->begin(); return *this; 
-	};
-	MatrixIterator end() { iter = _values->end(); return *this; };
-private:
-	std::map<FullIndex, T> *_values;
-	ResultType iteratorToTuple(std::map<FullIndex, T>::iterator it)
-	{
-		return std::tie(iter->first.first, iter->first.second, iter->second);		
-	}
-	std::map<FullIndex, T>::iterator iter;
-};
-
-
 template<typename T, T undefValue>
 class Matrix
 {
+	using FullIndex = std::pair<int, int>;
 	std::map<FullIndex, T> _values;
 	T _undefValue;
 	FullIndex _lastUsedIndex;
-	MatrixIterator<T> iterator { &_values };
+
+	struct Iterator
+	{
+		using ResultType = std::tuple<const int&, const int&, T&>;
+
+	public:
+		Iterator(std::map<FullIndex, T>* values) { _values = values; };
+
+		Iterator operator++() { ++iter; return *this; }
+		bool operator!=(const Iterator& other) { return iter != other.iter; }
+		ResultType operator*() { return iteratorToTuple(iter); }
+		Iterator begin() { iter = _values->begin(); return *this; };
+		Iterator end() { iter = _values->end(); return *this; };
+
+	private:
+		std::map<FullIndex, T>::iterator iter;
+		std::map<FullIndex, T>* _values;
+		ResultType iteratorToTuple(std::map<FullIndex, T>::iterator it)
+		{
+			return std::tie(iter->first.first, iter->first.second, iter->second);
+		}
+		
+	} iterator{ &_values };
 
 public:
 	Matrix();
