@@ -9,13 +9,38 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
-project ("06")
+set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
+set(PROJECT_VESRION 0.0.${PATCH_VERSION})
+
+project(matrix VERSION ${PROJECT_VESRION})
 
 # Добавьте источник в исполняемый файл этого проекта.
 add_executable (06 "main.cpp" "main.h" "Matrix.h"   )
 
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET 06 PROPERTY CXX_STANDARD 20)
+set_target_properties(matrix PROPERTIES
+    CXX_STANDARD 20
+    CXX_STANDARD_REQUIRED ON
+)
+target_include_directories(matrix PRIVATE "${CMAKE_BINARY_DIR}")
+
+if (MSVC)
+    target_compile_options(matrix PRIVATE
+        /W4
+    )
+else ()
+    target_compile_options(matrix PRIVATE
+        -Wall -Wextra -pedantic -Werror
+    )
 endif()
 
-# TODO: Добавьте тесты и целевые объекты, если это необходимо.
+install(TARGETS matrix RUNTIME DESTINATION bin)
+
+set(CPACK_GENERATOR DEB)
+
+set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
+
+set(CPACK_PACKAGE_CONTACT example@example.com)
+
+include(CPack)
