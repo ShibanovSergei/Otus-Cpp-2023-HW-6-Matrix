@@ -6,32 +6,23 @@ using FullIndex = std::pair<int, int>;
 template<typename T>
 struct MatrixIterator
 {
-	// using DataType = std::tuple<int&, int&, T&>;
+	using ResultType = std::tuple<const int&, const int&, T&>;
 public:	
-	MatrixIterator(std::map<FullIndex, T>* values)
-	{
-		a_values = values;
-	};
-	void SetData(std::map<FullIndex, T> &values) 
-	{ 
-		a_values = values; 
-		a_values[std::make_pair(5, 5)] = 25;
-	}
+	MatrixIterator(std::map<FullIndex, T>* values) { _values = values; };
 
 	MatrixIterator operator++() { ++iter; return *this; }
 	bool operator!=(const MatrixIterator& other) { return iter != other.iter; }
-	std::tuple<const int&, const int&, T&> operator*() { return iteratorToTuple(iter); }
+	ResultType operator*() { return iteratorToTuple(iter); }
 	MatrixIterator begin() 
 	{ 
-		iter = a_values->begin(); return *this; 
+		iter = _values->begin(); return *this; 
 	};
-	MatrixIterator end() { iter = a_values->end(); return *this; };
+	MatrixIterator end() { iter = _values->end(); return *this; };
 private:
-	std::map<FullIndex, T> *a_values;
-	std::tuple<const int&, const int&, T&> iteratorToTuple(std::map<FullIndex, T>::iterator it)
+	std::map<FullIndex, T> *_values;
+	ResultType iteratorToTuple(std::map<FullIndex, T>::iterator it)
 	{
-		auto res = std::tie(iter->first.first, iter->first.second, iter->second);
-		return res;
+		return std::tie(iter->first.first, iter->first.second, iter->second);		
 	}
 	std::map<FullIndex, T>::iterator iter;
 };
