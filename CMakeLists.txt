@@ -1,7 +1,4 @@
-﻿# CMakeList.txt: проект CMake для 06; включите исходный код и определения,
-# укажите здесь логику для конкретного проекта.
-#
-cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required (VERSION 3.8)
 
 # Включение горячей перезагрузки для компиляторов MSVC, если поддерживается.
 if (POLICY CMP0141)
@@ -15,7 +12,7 @@ set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 project(matrix VERSION ${PROJECT_VESRION})
 
 # Добавьте источник в исполняемый файл этого проекта.
-add_executable (06 "main.cpp" "main.h" "Matrix.h"   )
+add_executable (matrix "main.cpp" "main.h" "Matrix.h")
 
 set_target_properties(matrix PROPERTIES
     CXX_STANDARD 20
