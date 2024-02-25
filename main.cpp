@@ -28,11 +28,21 @@ void CheckAsExplained()
 	assert(matrix(100, 100) == 314);
 	assert(matrix.Size() == 1);
 
-	//for (auto c : matrix)
+	for (auto c : matrix)
+	{
+		int x, y, v;
+		std::tie(x, y, v) = c;
+		std::cout << x << ' ' << y << ' ' << v << std::endl;
+	}
+
+
+	//for (Type& v : a) { ... }
+	//Is equivalent to :
+
+	//for (auto iv = begin(matrix); iv != end(matrix); ++iv)
 	//{
-	//	int x, y, v;
-	//	std::tie(x, y, v) = c;
-	//	std::cout << x << y << v << std::endl;
+	//	Type& v = *iv;
+	//	...
 	//}
 
 	matrix(10, 1) = 2;
